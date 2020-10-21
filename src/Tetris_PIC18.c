@@ -22,6 +22,7 @@ static int px = 4;
 BOOL tb_current_fig[C_BLOCKS_SIZE][C_BLOCKS_SIZE];
 static int current_fig = 0;
 static int counter_movedown = 0;
+static int counter_rotate = 0;
 BOOL TetrisInGame  = FALSE;
 /*Local Prototypes*/
 static void Tetris_DrawFigure(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y, T_Figure_Drawing Set_or_Erase);
@@ -39,17 +40,49 @@ void ShowAnimationStart(void)
 		{
 			Tetris_WritePixel(i,j,0);
 		}
+		Delay(2);
 	}
 	DelayMs(50);
-	/*oledPutROMString("TETRIS",0,50);
-	oledPutROMString("Powered on PIC18F",2,0);
-	oledPutROMString("Generated at ISIB",3,0);
-	oledPutROMString("Bultot G. MA1 ELN",4,0);
-	oledPutROMString("PRESS MENU TO START",6,5);
-	DelayMs(100);
-	FillDisplay(0x00);*/
 }
 
+void Rotate()
+{
+	BOOL tb_temp_fig[C_BLOCKS_SIZE][C_BLOCKS_SIZE];
+	int i,j,k;
+/*	Figure ff = new Figure();
+	ff.figure = new int[sz, sz];
+	ff.colorFigure = figure.colorFigure;
+	ff.size = figure.size;*/
+	Tetris_EraseFigure(tb_current_fig, px, py);
+	/*for(i=0;i<C_BLOCK_SIZE;i++)
+	{
+		for(i=0;i<C_BLOCK_SIZE;i++)
+		{
+			tb_temp_fig[i][j] = tb_current_fig[i][j];
+		}
+	}*/
+	
+	for (k = 0; k < C_BLOCKS_SIZE; k++)
+	{
+		for (j = 0; j < C_BLOCKS_SIZE ; j++)
+		{
+			tb_temp_fig[k][j] = tb_current_fig[j][k];
+		}
+	}
+	
+	if (check(tb_temp_fig, px, py))
+	{
+		for(i=0;i<C_BLOCKS_SIZE;i++)
+		{
+			for(j=0;j<C_BLOCKS_SIZE;j++)
+			{
+				tb_current_fig[i][j] = tb_temp_fig[i][j];
+			}
+		}
+		Tetris_SetFigure(tb_current_fig, px, py);
+	}
+	
+}
 BOOL moveDown() //TODO: return bool value id movedown is possible
 {
 	int count = 0;
@@ -169,6 +202,7 @@ void Tetris_process(void)
 {
 	signed int value_x,value_y;
 	my_BMA150_XYZ posAcc;
+		unsigned int w1;
 	if(TetrisInGame )
 	{
 		get_XYZ(&posAcc);
@@ -176,6 +210,14 @@ void Tetris_process(void)
 		value_x = posAcc.x;
 		if(counter_movedown <= 20)
 		{
+			if(counter_movedown%3 == 0)
+			{
+				w1 = mTouchReadButton(0); //Accept Button
+				if (w1 < 600)
+				{
+					Rotate();
+				}
+			}
 			if(value_x & 0x0100) //negative => Left
 			{
 				
@@ -313,38 +355,3 @@ BOOL check(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y)
 	}
 	return TRUE;
 }
-
-
-
-
-
-
-
-/*
-static void Tetris_DrawFigure(const unsigned char piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], unsigned char x, unsigned char y, T_Figure_Drawing Set_or_Erase)
-{
-	unsigned char i,j;
-	for(i = 0;i< C_BLOCKS_SIZE;i++)
-	{
-		for(j = 0;j< C_BLOCKS_SIZE;j++)
-		{
-			if(piece[i][j])
-			{
-				if(Set_or_Erase == E_Figure_Erase)
-				{
-					Tetris_EraseBlock(x+i, y+j);
-				}
-				else if(Set_or_Erase == E_Figure_Set)
-				{
-					Tetris_SetBlock(x+i, y+j);
-				}
-				
-			}
-			
-		}
-	}
-}*/
-
-
-
-
