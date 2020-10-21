@@ -17,7 +17,7 @@ void moveLeft(void);
 void Rotate(void);
 void setFigure(void);
 void Tetris_process(void);
-BOOL check(const BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y);
-void Tetris_EraseFigure(const BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y);
-void Tetris_SetFigure(const BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y);
+BOOL check(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y);
+void Tetris_EraseFigure(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y);
+void Tetris_SetFigure(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y);
 #endif

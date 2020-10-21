@@ -19,11 +19,12 @@ typedef enum{
 static BOOL tb_TetrisGrid[C_TETRIS_HEIGHT][C_TETRIS_WIDTH];
 static int py = -1;
 static int px = 4;
+BOOL tb_current_fig[C_BLOCKS_SIZE][C_BLOCKS_SIZE];
 static int current_fig = 0;
 static int counter_movedown = 0;
 BOOL TetrisInGame  = FALSE;
 /*Local Prototypes*/
-static void Tetris_DrawFigure(const BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y, T_Figure_Drawing Set_or_Erase);
+static void Tetris_DrawFigure(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y, T_Figure_Drawing Set_or_Erase);
 
 
 void ShowAnimationStart(void)
@@ -56,16 +57,16 @@ BOOL moveDown() //TODO: return bool value id movedown is possible
 	BOOL full = TRUE;
 	int i,j,k;
 	
-	Tetris_EraseFigure(Blocks[current_fig], px, py);
-	if(check(Blocks[current_fig],px,py+1))
+	Tetris_EraseFigure(tb_current_fig, px, py);
+	if(check(tb_current_fig,px,py+1))
 	{
 		py++;
-		Tetris_SetFigure(Blocks[current_fig], px, py);
+		Tetris_SetFigure(tb_current_fig, px, py);
 		return TRUE;
 	}
 	else
 	{	
-		Tetris_SetFigure(Blocks[current_fig], px, py);
+		Tetris_SetFigure(tb_current_fig, px, py);
 	}
 	
 	//Si on ne sait plus la placer, (il y a le return true si oui) soit on est dans le cas où on a perdu soit on est dans le cas où la pièce est placée et donc on vérifie si il y a une ligne complète
@@ -111,34 +112,42 @@ BOOL moveDown() //TODO: return bool value id movedown is possible
 
 void moveRight(void)
 {
-	Tetris_EraseFigure(Blocks[current_fig], px, py);
-	if(check(Blocks[current_fig],px+1,py))
+	Tetris_EraseFigure(tb_current_fig, px, py);
+	if(check(tb_current_fig,px+1,py))
 	{
 		px++;
 	}
-	Tetris_SetFigure(Blocks[current_fig], px, py);
+	Tetris_SetFigure(tb_current_fig, px, py);
 
 }
 
 void moveLeft(void)
 {
-	Tetris_EraseFigure(Blocks[current_fig], px, py);
-	if(check(Blocks[current_fig],px-1,py))
+	Tetris_EraseFigure(tb_current_fig, px, py);
+	if(check(tb_current_fig,px-1,py))
 	{
 		px--;
 	}
-	Tetris_SetFigure(Blocks[current_fig], px, py);
+	Tetris_SetFigure(tb_current_fig, px, py);
 }
 
 void setFigure()
 {
 	//srand(time(NULL));   // Initialization, should only be called once.
 	//int r = rand();      // Returns a pseudo-random integer between 0 and RAND_MAX.
-
+	int i,j;
 	current_fig ++;
 	current_fig%=7;
+	
+	for(i=0;i<C_BLOCKS_SIZE;i++)
+	{
+		for(j=0;j<C_BLOCKS_SIZE;j++)
+		{
+			tb_current_fig[i][j]= Blocks[current_fig][i][j];//1;
+		}
+	}
 	py = -1;
-    px = 4;
+    px = 2;
 	//TODO: calcule time intervzal //_timer.Interval = (int)(200 / (level * 0.7));
 }
 void Tetris_Init(void)
@@ -152,6 +161,7 @@ void Tetris_Init(void)
 			tb_TetrisGrid[i][j] = 0;
 		}
 	}
+	setFigure();
 }
 
 
@@ -194,8 +204,8 @@ void Tetris_process(void)
 				//Si la pièce peut se placeer en py + 1. Si elle peut, c'est que py = -1 parce qu'on est arrivé au fond et si non, c'est qu'il n'y a plus de place
 				//Console.WriteLine(py);
 				
-				if (check(Blocks[current_fig], px, py+1))
-					Tetris_SetFigure(Blocks[current_fig], px, py);
+				if (check(tb_current_fig, px, py+1))
+					Tetris_SetFigure(tb_current_fig, px, py);
 				else
 				{ 
 					stop();
@@ -236,18 +246,18 @@ void Show_TetrisGrid(void)
 	}
 }
 
-void Tetris_EraseFigure(const BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y)
+void Tetris_EraseFigure(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y)
 {
 	Tetris_DrawFigure(piece, x, y,E_Figure_Erase );
 }
 
-void Tetris_SetFigure(const BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y)
+void Tetris_SetFigure(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y)
 {
 	Tetris_DrawFigure(piece, x, y,E_Figure_Set);
 }
 
 
-static void Tetris_DrawFigure(const BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x,  int y, T_Figure_Drawing Set_or_Erase)
+static void Tetris_DrawFigure(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x,  int y, T_Figure_Drawing Set_or_Erase)
 {
 	unsigned char i,j;
 	for(i = 0;i< C_BLOCKS_SIZE;i++)
@@ -271,7 +281,7 @@ static void Tetris_DrawFigure(const BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], in
 
 
 
-BOOL check(const BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y)
+BOOL check(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y)
 {
 	
 	//int sz = figure.size;
