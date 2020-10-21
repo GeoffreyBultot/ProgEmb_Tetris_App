@@ -4,12 +4,15 @@
 #include "GenericTypeDefs.h"
 typedef struct XYZ
 {
-	signed short int x;
+	signed int x;
 	signed int y;
 	signed int z;
 } my_BMA150_XYZ ;
 
-void get_XYZ(my_BMA150_XYZ *posAcc);
+extern signed int offsetAccX;
+extern signed int offsetAccY;
 
+void get_XYZ(my_BMA150_XYZ *posAcc);
+void CalibrateBMA150();
 #endif
 

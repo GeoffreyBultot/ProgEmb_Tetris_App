@@ -63,7 +63,7 @@ void AppStateMachine(void)
     {
         case 0:
 			
-			//ShowAnimationStart();
+			ShowAnimationStart();
 			menuPosition++;
 			break;
         case 1:
@@ -166,16 +166,16 @@ void AppStateMachine(void)
 				}
 			
 			break;
-		case 7:
+		case 7://
 				if( TetrisInGame == FALSE)
 					menuPosition = 8;
 				else
 				{
 					Tetris_process();
-					DelayMs(2);
+					
 				}
 			break;
-		case 8:
+		case 8://
 			w1 = mTouchReadButton(0); //Accept Button
 			if (w1 < 600)
 			{
@@ -184,8 +184,13 @@ void AppStateMachine(void)
 				DelayMs(100);
 			}
 			break;
-        case 9:
-			//CalibrateAcc(); //TODO
+        case 9://CALIBRATION
+			CalibrateBMA150();
+			w1 = mTouchReadButton(3);
+			if (w1 < 600)
+			{
+				menuPosition = 5;
+			}
             break;
 
 		case 10:

@@ -5,7 +5,6 @@
 #include "./headers/Oled.h"
 #include "./headers/ArraysImages.h"
 #include "GenericTypeDefs.h"
-
 //#include "./headers/Tetris_BMA150.h"
 //#include "./headers/"
 //#include <time.h>
@@ -19,6 +18,8 @@ typedef enum{
 static BOOL tb_TetrisGrid[C_TETRIS_HEIGHT][C_TETRIS_WIDTH];
 static int py = -1;
 static int px = 4;
+static int score = 0;
+static int level = 0;
 BOOL tb_current_fig[C_BLOCKS_SIZE][C_BLOCKS_SIZE];
 static int current_fig = 0;
 static int counter_movedown = 0;
@@ -40,7 +41,7 @@ void ShowAnimationStart(void)
 		{
 			Tetris_WritePixel(i,j,0);
 		}
-		Delay(2);
+		DelayMs(2);
 	}
 	DelayMs(50);
 }
@@ -49,10 +50,6 @@ void Rotate()
 {
 	BOOL tb_temp_fig[C_BLOCKS_SIZE][C_BLOCKS_SIZE];
 	int i,j,k;
-/*	Figure ff = new Figure();
-	ff.figure = new int[sz, sz];
-	ff.colorFigure = figure.colorFigure;
-	ff.size = figure.size;*/
 	Tetris_EraseFigure(tb_current_fig, px, py);
 	/*for(i=0;i<C_BLOCK_SIZE;i++)
 	{
@@ -62,11 +59,12 @@ void Rotate()
 		}
 	}*/
 	
-	for (k = 0; k < C_BLOCKS_SIZE; k++)
+	for (i = 0; i < C_BLOCKS_SIZE; i++)
 	{
 		for (j = 0; j < C_BLOCKS_SIZE ; j++)
 		{
-			tb_temp_fig[k][j] = tb_current_fig[j][k];
+			//umFig[j][i] = currentPiece.umBlock[4 - i - 1][j];
+			tb_temp_fig[i][j] = tb_current_fig[ C_BLOCKS_SIZE - j - 1][i];
 		}
 	}
 	
@@ -128,19 +126,13 @@ BOOL moveDown() //TODO: return bool value id movedown is possible
 		full = TRUE;
 	}
 	
-	/*if (lines % 20 == 0 && lines != 0 && (level - 1) * 20 != lines) level++;
+	if (lines % 20 == 0 && lines != 0 && (level - 1) * 20 != lines) level++;
 	//Score en fonction du nombre de lignes d'un coup
-	if (count == 1) score += (10 * count);
-	if (count == 2) score += (20 * count);
-	if (count == 3) score += (30 * count);
-	if (count == 4) score += (40 * count);
-	*/
-	
-		setFigure();
-		return FALSE;
+	score += (10 * count * count);
 	
 	
-	//DelayMs(5);
+	setFigure();
+	return FALSE;
 }
 
 void moveRight(void)
@@ -195,6 +187,8 @@ void Tetris_Init(void)
 		}
 	}
 	setFigure();
+	score = 0;
+	level = 0;
 }
 
 
@@ -207,8 +201,8 @@ void Tetris_process(void)
 	{
 		get_XYZ(&posAcc);
 		counter_movedown ++;
-		value_x = posAcc.x;
-		if(counter_movedown <= 20)
+		value_x = posAcc.x - offsetAccX;
+		if(counter_movedown <= 9)
 		{
 			if(counter_movedown%3 == 0)
 			{
@@ -249,7 +243,8 @@ void Tetris_process(void)
 				if (check(tb_current_fig, px, py+1))
 					Tetris_SetFigure(tb_current_fig, px, py);
 				else
-				{ 
+				{ 	
+					Tetris_SetFigure(tb_current_fig, px, py);
 					stop();
 					return;
 				}
@@ -259,6 +254,7 @@ void Tetris_process(void)
 		}
 		
 		Show_TetrisGrid();
+		DelayMs(5);
 	}
 }
 
