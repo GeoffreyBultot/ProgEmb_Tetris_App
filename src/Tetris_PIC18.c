@@ -5,10 +5,7 @@
 #include "./headers/Oled.h"
 #include "./headers/ArraysImages.h"
 #include "GenericTypeDefs.h"
-//#include "./headers/Tetris_BMA150.h"
-//#include "./headers/"
-//#include <time.h>
-#include <stdlib.h>
+#include "timers.h"
 
 typedef enum{
 	E_Figure_Erase = 1,
@@ -21,7 +18,7 @@ static int px = 4;
 static int score = 0;
 static int level = 0;
 BOOL tb_current_fig[C_BLOCKS_SIZE][C_BLOCKS_SIZE];
-static int current_fig = 0;
+static int current_fig = 4;
 static int counter_movedown = 0;
 static int counter_rotate = 0;
 BOOL TetrisInGame  = FALSE;
@@ -161,12 +158,17 @@ void moveLeft(void)
 
 void setFigure()
 {
-	//srand(time(NULL));   // Initialization, should only be called once.
-	//int r = rand();      // Returns a pseudo-random integer between 0 and RAND_MAX.
-	int i,j;
-	current_fig ++;
-	current_fig%=7;
 	
+	int r;      // Returns a pseudo-random integer between 0 and RAND_MAX.
+	int i,j;
+	//srand(current_fig );   // Initialization, should only be called once.
+	
+
+	T0CONbits.TMR0ON = 0; // Stop the timer
+	current_fig = TMR0L + TMR0L ;
+	current_fig%=7;
+	T0CONbits.TMR0ON = 1; // Stop the timer
+
 	for(i=0;i<C_BLOCKS_SIZE;i++)
 	{
 		for(j=0;j<C_BLOCKS_SIZE;j++)

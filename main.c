@@ -1,3 +1,4 @@
+#include "p18f46j50.h"
 #include "stdio.h"
 #include "Compiler.h"
 #include "GenericTypeDefs.h"
@@ -11,9 +12,7 @@
 #include "./headers/Tetris_Mtouch.h"
 #include "./headers/ArraysImages.h"
 
-//#include "mtouch.h"
-//#include "soft_start.h"
-//#include "Slider2Ch.h"
+#include "timers.h"
 
      #pragma config WDTEN = OFF          //WDT disabled (enabled by SWDTEN bit)
      #pragma config PLLDIV = 3           //Divide by 3 (12 MHz oscillator input)
@@ -236,16 +235,28 @@ void InitApplication(void)
 	mTouchCalibrate();
 
 	
+	// Timer0 configuration
+	T0CONbits.TMR0ON = 0; // Stop the timer
+	T0CONbits.T08BIT = 0; // Run in 16-bit mode
+	T0CONbits.T0CS = 0; // Use system clock to increment timer
+	T0CONbits.PSA = 0; // A prescaler is assigned for Timer0
+	T0CONbits.T0PS2 = 0; // Use a 1:256 prescaler
+	T0CONbits.T0PS1 = 0;
+	T0CONbits.T0PS0 = 0;
+	TMR0L=0 ;
+	TMR0H=0;
+
+	INTCONbits.TMR0IE = 0;// disable TIM0 interrupt
+	INTCONbits.TMR0IF = 0;// clear TIM0 interrupt flag
+	T0CONbits.TMR0ON = 1; // Start the timer
+	
 }
 void main (void)
 {
-	int y = 3;
-	InitApplication();
-	// 1 DOWN
-	// 2 UP
-	// 3 L
-	// 0 R
 	
+unsigned int timerValue = 1;
+int y = 3;
+	InitApplication();
 	while(1)
 	{
 		AppStateMachine();
