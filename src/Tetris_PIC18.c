@@ -109,7 +109,7 @@ BOOL moveDown() //TODO: return bool value id movedown is possible
 	//Si on ne sait plus la placer, (il y a le return true si oui) soit on est dans le cas où on a perdu soit on est dans le cas où la pièce est placée et donc on vérifie si il y a une ligne complète
 	//C_TETRIS_HEIGHT = nuwroms	
 	//C_TETRIS_WIDTH = numcols
-	for (j = C_TETRIS_HEIGHT ; j > 0 ; j--)
+	for (j = C_TETRIS_HEIGHT-1 ; j >= 0 ; j--)
 	{
 		full = TRUE;
 		for (i = 0; i < C_TETRIS_WIDTH; i++)
@@ -128,10 +128,8 @@ BOOL moveDown() //TODO: return bool value id movedown is possible
 				}
 			}
 		}
-	
-		full = TRUE;
+	full = TRUE;
 	}
-	
 	if (lines % 20 == 0 && lines != 0 && (level - 1) * 20 != lines) level++;
 	//Score en fonction du nombre de lignes d'un coup
 	score += (10 * count * count);
@@ -348,9 +346,6 @@ BOOL check(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y)
 			int ry = 15 - (i + y);
 			//C_TETRIS_HEIGHT = nuwroms	
 			//C_TETRIS_WIDTH = numcols
-			//TODO fix the bug ! Quand une piece de 3 de haut descend, elle ne descend pas tout en bas (logique en sois)
-			
-			//if(piece[j][i]
 			if ( (rx < 0 || rx >= C_TETRIS_WIDTH || ry < 0 || ry >= C_TETRIS_HEIGHT) && (piece[i][j] != 0))
 				return FALSE;
 
