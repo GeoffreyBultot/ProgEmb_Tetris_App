@@ -119,9 +119,10 @@ void AppStateMachine(void)
 			}		
 			
 			
-            oledPutROMString("                    ",0,0);
-            oledPutROMString("                    ",2,0);
-            oledPutROMString("                    ",4,0);
+            oledPutROMString("                     ",0,0);
+            oledPutROMString("                     ",2,0);
+            oledPutROMString("                     ",4,0);
+            oledPutROMString("                     ",6,0);
 
 			if (g_menuSelected == 0)
 				oledPutROMNegString("      NEW  GAME      ",1,0);	
@@ -138,7 +139,6 @@ void AppStateMachine(void)
 			else
 				oledPutROMString("      QUIT GAME      ",5,0);
 
-            oledPutROMString("                    ",6,0);
 
 			w1 = mTouchReadButton(0); //Accept Button
 			if (w1 < 600)
@@ -167,7 +167,10 @@ void AppStateMachine(void)
 			break;
 		case 7://
 				if( TetrisInGame == FALSE)
-					menuPosition = 8;
+				{
+					menuPosition = 5;
+					FillDisplay(0x00);
+				}
 				else
 				{
 					Tetris_process();
@@ -194,15 +197,6 @@ void AppStateMachine(void)
 
 		case 10:
 			FillDisplay(0xFF);
-			/*oledPutROMNegString((ROM_STRING)"  CORNGRATULATIONS!  ",0,0);
-			oledPutROMNegString((ROM_STRING)"   You won nothing   ",2,0);
-			oledPutROMNegString((ROM_STRING)" You just waste your ",3,0);
-			oledPutROMNegString((ROM_STRING)"   PRECIOUS time :)  ",4,0);*/
-			/*DelayMs(2000);
-			DemoIntroState = 6;
-			FillDisplay(0x00);
-			g_level = 0;
-			g_ballGtt = 0;*/
 			break;
         default:
             break;

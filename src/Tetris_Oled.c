@@ -49,3 +49,35 @@ void Tetris_DrawBlock(BYTE X, BYTE Y, BYTE value)
 	}
 	
 }
+
+
+void Tetris_DrawEmptBlock(BYTE X, BYTE Y)
+{
+	unsigned char i;
+	unsigned char x_pos;
+	if(X <= C_TETRIS_HEIGHT && Y<= C_TETRIS_WIDTH)
+	{	
+		//SET Y PAGE ADDRESS // 0xB0 | ((Y>>3)&0x07)
+		WriteCommand( 0xB0 | Y );
+		x_pos = 8*X + OFFSET;
+		for( i = 0 ; i < 8 ; i++ )
+		{
+			x_pos++;
+			WriteCommand( x_pos & 0x0F);				// set the column (PAGE X): lower 4 bits
+			WriteCommand( 0x10 | ((x_pos>>4)&0x0F)); // set the column: (PAGE X) upper 4 bits
+			
+			if( (i == 0) || (i == 7) ) //draw horizontal borders
+			{
+				WriteData(0xFF);
+			}
+			else//Write normal block
+			{
+				if(i%2)
+					WriteData(0b10000001);//0b10101011);//(C_OLED_BLOCK_BITS_ER);
+				else
+					WriteData(0b10000001);//(C_OLED_BLOCK_BITS_ER);
+			}
+		}
+	}
+	
+}

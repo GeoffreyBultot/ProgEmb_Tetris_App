@@ -14,7 +14,7 @@ typedef enum{
 
 static BOOL tb_TetrisGrid[C_TETRIS_HEIGHT][C_TETRIS_WIDTH];
 static int py = -1;
-static int px = 4;
+static int px = 2;
 static int score = 0;
 static int level = 0;
 BOOL tb_current_fig[C_BLOCKS_SIZE][C_BLOCKS_SIZE];
@@ -24,7 +24,7 @@ static int counter_rotate = 0;
 BOOL TetrisInGame  = FALSE;
 /*Local Prototypes*/
 static void Tetris_DrawFigure(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y, T_Figure_Drawing Set_or_Erase);
-
+static void Tetris_ShowFigureAtEnd(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE]);
 
 void ShowAnimationStart(void)
 {
@@ -54,13 +54,6 @@ void Rotate()
 	BOOL tb_temp_fig[C_BLOCKS_SIZE][C_BLOCKS_SIZE];
 	int i,j,k;
 	Tetris_EraseFigure(tb_current_fig, px, py);
-	/*for(i=0;i<C_BLOCK_SIZE;i++)
-	{
-		for(i=0;i<C_BLOCK_SIZE;i++)
-		{
-			tb_temp_fig[i][j] = tb_current_fig[i][j];
-		}
-	}*/
 	
 	for (i = 0; i < C_BLOCKS_SIZE; i++)
 	{
@@ -159,11 +152,8 @@ void moveLeft(void)
 void setFigure()
 {
 	
-	int r;      // Returns a pseudo-random integer between 0 and RAND_MAX.
 	int i,j;
-	//srand(current_fig );   // Initialization, should only be called once.
 	
-
 	T0CONbits.TMR0ON = 0; // Stop the timer
 	current_fig = TMR0L + TMR0L ;
 	current_fig%=7;
@@ -215,6 +205,13 @@ void Tetris_process(void)
 				if (w1 < 600)
 				{
 					Rotate();
+					Show_TetrisGrid();
+				}
+				
+				w1 = mTouchReadButton(3); //Cancel Button
+				if(w1 < 600)
+				{
+					TetrisInGame = FALSE;
 				}
 			}
 			if(value_x & 0x0100) //negative => Left
@@ -224,6 +221,7 @@ void Tetris_process(void)
 				if(value_x > 15)
 				{
 					moveLeft();
+					Show_TetrisGrid();
 				}
 			}
 			else //Positive => Right
@@ -231,6 +229,7 @@ void Tetris_process(void)
 				if(value_x > 15)
 				{
 					moveRight();
+					Show_TetrisGrid();
 				}
 			}
 		
@@ -256,9 +255,8 @@ void Tetris_process(void)
 			}
 			//moveDown();
 			counter_movedown=0;
+			Show_TetrisGrid();
 		}
-		
-		Show_TetrisGrid();
 		DelayMs(5);
 	}
 }
@@ -295,8 +293,7 @@ void Show_TetrisGrid(void)
 			}
 		}
 	}
-
-	
+	Tetris_ShowFigureAtEnd(tb_current_fig);
 }
 
 void Tetris_EraseFigure(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y)
@@ -332,6 +329,39 @@ static void Tetris_DrawFigure(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x,  
 	}
 }
 
+
+static void Tetris_ShowFigureAtEnd(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE])
+{
+	unsigned char i,j;
+	int rx,ry;
+	int endpiece_py = py;
+	
+	Tetris_EraseFigure(tb_current_fig, px, py);
+	
+	while(check(tb_current_fig,px,endpiece_py))
+	{
+		endpiece_py++;
+	}
+	
+	endpiece_py--;
+	
+	Tetris_SetFigure(tb_current_fig, px, py);
+	
+	
+	for(i = 0;i< C_BLOCKS_SIZE;i++)
+	{
+		for(j = 0;j< C_BLOCKS_SIZE;j++)
+		{
+			rx = j + px;
+			ry = 15 - (i + endpiece_py);
+			
+			if(piece[i][j])
+			{
+				Tetris_DrawEmptBlock(ry,rx);
+			}
+		}
+	}
+}
 
 
 BOOL check(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y)
