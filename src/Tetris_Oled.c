@@ -21,24 +21,28 @@ void Tetris_DrawBlock(BYTE X, BYTE Y, BYTE value)
 	{	
 		//SET Y PAGE ADDRESS // 0xB0 | ((Y>>3)&0x07)
 		WriteCommand( 0xB0 | Y );
-		x_pos = 8*X;
+		x_pos = 8*X + OFFSET;
 		for( i = 0 ; i < 8 ; i++ )
 		{
 			x_pos++;
 			WriteCommand( x_pos & 0x0F);				// set the column (PAGE X): lower 4 bits
 			WriteCommand( 0x10 | ((x_pos>>4)&0x0F)); // set the column: (PAGE X) upper 4 bits
-			if(i == 0||i==7)
-				WriteData(C_OLED_BLOCK_BITS_ER);
-			else
+			
+			if( ((i == 0) && (X==0)) || ((i == 6) && (X==15)) ) //draw horizontal borders
 			{
-				if(value)
-					pixels = C_OLED_BLOCK_BITS_SET;
+				WriteData(0xFF);
+			}
+			else//Write normal block
+			{
+				if(value==0 || i==0 || i == 7) //no pixel if value = 0 or if "i" is the first or last bit of x pos block
+					pixels = (C_OLED_BLOCK_BITS_ER);
 				else
-					pixels = C_OLED_BLOCK_BITS_ER;
+					pixels = (C_OLED_BLOCK_BITS_SET);
 				
-				if(  Y == 0 ) //|| (X == 7)) && (( Y == 0 ) || (Y == 15)) )
-					pixels |= 0b00000001;
-				
+				if( Y == 0)
+					pixels |= 0b00000001; //Left border
+				else if (Y == 7)
+					pixels |= 0b10000000; //Right border
 				WriteData(pixels);
 			}
 		}
