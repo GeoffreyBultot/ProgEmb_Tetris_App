@@ -35,11 +35,17 @@ void ShowAnimationStart(void)
 	oledPutImage( tb_uc_LOGO,128,8,0,0);
 	DelayMs(1000);
 	
-	for(i = 0 ; i < 128 ; i++)
+	
+	for(i = OFFSET ; i < SCREEN_HOR_SIZE + OFFSET; i++)
 	{
-		for(j = 0 ; j < 64 ; j++)
+			WriteCommand( i & 0x0F);
+			WriteCommand( 0x10 | ((i>>4)&0x0F));
+		for(j = 0 ; j < 8 ; j++)
 		{
-			Tetris_WritePixel(i,j,0);
+			//TODO//Tetris_WritePixel(i,j,0);
+			
+			WriteCommand( 0xB0 | j );
+			WriteData(0);
 		}
 		DelayMs(2);
 	}
@@ -129,7 +135,6 @@ BOOL moveDown() //TODO: return bool value id movedown is possible
 	if (lines % 20 == 0 && lines != 0 && (level - 1) * 20 != lines) level++;
 	//Score en fonction du nombre de lignes d'un coup
 	score += (10 * count * count);
-	
 	
 	setFigure();
 	return FALSE;
@@ -263,6 +268,7 @@ void stop()
 	counter_movedown=0;	
 	TetrisInGame  = FALSE;
 	oledPutImage( tb_uc_GameOver,128,8,0,0);
+	setScore(score,2,1);
 }
 
 void Show_TetrisGrid(void)
@@ -278,10 +284,19 @@ void Show_TetrisGrid(void)
 			}
 			else
 			{
-				Tetris_EraseBlock(j, i);
+				if( (i==15) && j <= 3)
+				{
+					setScore(score,0,15);
+				}
+				else
+				{
+					Tetris_EraseBlock(j, i);
+				}
 			}
 		}
 	}
+
+	
 }
 
 void Tetris_EraseFigure(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y)
@@ -350,4 +365,23 @@ BOOL check(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y)
 		}	
 	}
 	return TRUE;
+}
+
+
+
+//x = range(0 to 7) y = range (0 to 15)
+void setScore(int score, int startx, int y)
+{
+	int i;
+	int divider=1000;
+	int digit;
+	for(i = startx; i < startx+4 ; i++)
+	{
+		digit = (score/divider)%10;
+		oledPutImage( NumberFont[digit],8,i+1,8*y,i);
+		divider /=10;
+	}
+	//oledPutROMString((ram unsigned char *)buffer,8*y,2);
+	//oledPutImage(buffer,8,1,8,3);
+	
 }

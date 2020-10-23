@@ -7,6 +7,8 @@ void Tetris_EraseFigure(const unsigned char piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE],
 */
 
 extern BOOL TetrisInGame ;
+
+void setScore(int score, int startx, int y);
 void Tetris_Init(void);
 void stop(void);
 void ShowAnimationStart(void);

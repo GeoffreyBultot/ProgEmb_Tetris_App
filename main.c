@@ -63,7 +63,7 @@ void AppStateMachine(void)
     {
         case 0:
 			
-			ShowAnimationStart();
+			//ShowAnimationStart();
 			menuPosition++;
 			break;
         case 1:
@@ -239,6 +239,7 @@ void InitApplication(void)
 }
 void main (void)
 {
+	int y = 3;
 	InitApplication();
 	// 1 DOWN
 	// 2 UP

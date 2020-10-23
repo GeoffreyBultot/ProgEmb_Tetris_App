@@ -20,10 +20,10 @@
 #define C_TETRIS_WIDTH 8
 #define C_TETRIS_HEIGHT 16
 void stop();
-void Tetris_Oled_Write(char data);
+/*void Tetris_Oled_Write(char data);
 char Tetris_Oled_Read();
 void Tetris_WritePixel(BYTE X, BYTE Y, BYTE Data);
-void Tetris_DrawBlock(BYTE X, BYTE Y, BYTE value);
+*/void Tetris_DrawBlock(BYTE X, BYTE Y, BYTE value);
 
 void Tetris_SetBlock(BYTE X, BYTE Y);
 void Tetris_EraseBlock(BYTE X, BYTE Y);
