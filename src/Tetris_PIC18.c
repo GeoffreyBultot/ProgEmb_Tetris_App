@@ -35,10 +35,11 @@ void ShowAnimationStart(void)
 	
 	for(i = OFFSET ; i < SCREEN_HOR_SIZE + OFFSET; i++)
 	{
-			WriteCommand( i & 0x0F);
-			WriteCommand( 0x10 | ((i>>4)&0x0F));
+			
 		for(j = 0 ; j < 8 ; j++)
 		{
+			WriteCommand( i & 0x0F);
+			WriteCommand( 0x10 | ((i>>4)&0x0F));
 			//TODO//Tetris_WritePixel(i,j,0);
 			
 			WriteCommand( 0xB0 | j );
@@ -303,7 +304,6 @@ void stop()
 	TetrisInGame  = FALSE;
 	oledPutImage( tb_uc_GameOver,128,8,0,0);
 	setScore(score,2,1);
-	DelayMs(500);
 }
 
 void Show_TetrisGrid(void)

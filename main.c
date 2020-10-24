@@ -62,7 +62,7 @@ void AppStateMachine(void)
     {
         case 0:
 			
-			//ShowAnimationStart();
+			ShowAnimationStart();
 			menuPosition++;
 			break;
         case 1:
@@ -168,8 +168,8 @@ void AppStateMachine(void)
 		case 7://
 				if( TetrisInGame == FALSE)
 				{
-					menuPosition = 5;
-					FillDisplay(0x00);
+					DelayMs(500);
+					menuPosition = 8;
 				}
 				else
 				{
@@ -194,10 +194,6 @@ void AppStateMachine(void)
 				menuPosition = 5;
 			}
             break;
-
-		case 10:
-			FillDisplay(0xFF);
-			break;
         default:
             break;
     }
