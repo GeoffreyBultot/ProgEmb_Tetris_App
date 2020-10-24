@@ -28,5 +28,5 @@ void Tetris_WritePixel(BYTE X, BYTE Y, BYTE Data);
 void Tetris_SetBlock(BYTE X, BYTE Y);
 void Tetris_EraseBlock(BYTE X, BYTE Y);
 
-void Tetris_DrawEmptBlock(BYTE X, BYTE Y);
+void Tetris_DrawEmptyBlock(BYTE X, BYTE Y);
 #endif

@@ -51,7 +51,7 @@ void Tetris_DrawBlock(BYTE X, BYTE Y, BYTE value)
 }
 
 
-void Tetris_DrawEmptBlock(BYTE X, BYTE Y)
+void Tetris_DrawEmptyBlock(BYTE X, BYTE Y)
 {
 	unsigned char i;
 	unsigned char x_pos;

@@ -62,7 +62,7 @@ void AppStateMachine(void)
     {
         case 0:
 			
-			ShowAnimationStart();
+			//ShowAnimationStart();
 			menuPosition++;
 			break;
         case 1:
