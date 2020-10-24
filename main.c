@@ -129,7 +129,7 @@ void AppStateMachine(void)
 			else
             	oledPutROMString("      NEW  GAME      ",1,0);
 		    
-			if (g_menuSelected == 1)
+			if (g_menuSelected == 1)	
             	oledPutROMNegString("      CALIBRATE      ",3,0);
 			else
 				oledPutROMString("      CALIBRATE      ",3,0);

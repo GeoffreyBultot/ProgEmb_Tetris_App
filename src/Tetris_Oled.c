@@ -72,10 +72,7 @@ void Tetris_DrawEmptyBlock(BYTE X, BYTE Y)
 			}
 			else//Write normal block
 			{
-				if(i%2)
 					WriteData(0b10000001);//0b10101011);//(C_OLED_BLOCK_BITS_ER);
-				else
-					WriteData(0b10000001);//(C_OLED_BLOCK_BITS_ER);
 			}
 		}
 	}

@@ -386,7 +386,7 @@ static void Tetris_SetFigureAtEnd(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE])
 		for( j = 0 ; j < C_TETRIS_WIDTH ; j++)
 		{
 			if(tb_TetrisGrid[i][j] == 2)
-				tb_TetrisGrid[i][j] = 0;
+			{tb_TetrisGrid[i][j] = 0;}
 		}
 	}
 	
@@ -396,7 +396,7 @@ static void Tetris_SetFigureAtEnd(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE])
 		endpiece_py++;
 	}
 	endpiece_py--;
-	
+	Tetris_SetFigure(tb_current_fig, px, py);
 	
 	
 	for(i = 0;i< C_BLOCKS_SIZE;i++)
@@ -408,14 +408,13 @@ static void Tetris_SetFigureAtEnd(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE])
 			
 			if(tb_current_fig[i][j])
 			{
-				if(tb_TetrisGrid[rx][ry] == 0)
 				tb_TetrisGrid[rx][ry] = 2;
 				//Tetris_DrawEmptyBlock(ry,rx);
 			}
 		}
 	}
 	
-	Tetris_SetFigure(tb_current_fig, px, py);
+	
 }
 
 
@@ -440,7 +439,7 @@ BOOL check(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y)
 			{
 				if (piece[i][j])
 				{
-					if ( tb_TetrisGrid[ry][rx] == 1)
+					if ( tb_TetrisGrid[ry][rx] != 0)
 						return FALSE;
 				}
 			}
