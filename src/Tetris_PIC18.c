@@ -26,6 +26,8 @@ BOOL TetrisInGame  = FALSE;
 static void Tetris_DrawFigure(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y, T_Figure_Drawing Set_or_Erase);
 static void Tetris_ShowFigureAtEnd(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE]);
 
+static void rotation_SetFigure(BOOL tb_temp_fig[4][4]);
+
 void ShowAnimationStart(void)
 {
 	unsigned char i,j;
@@ -49,6 +51,20 @@ void ShowAnimationStart(void)
 	DelayMs(50);
 }
 
+
+static void rotation_SetFigure(BOOL tb_temp_fig[4][4])
+{
+	int i,j;
+	for(i=0;i<C_BLOCKS_SIZE;i++)
+	{
+		for(j=0;j<C_BLOCKS_SIZE;j++)
+		{
+			tb_current_fig[i][j] = tb_temp_fig[i][j];
+		}
+	}
+	Tetris_SetFigure(tb_current_fig, px, py);
+}
+
 void Rotate()
 {
 	BOOL tb_temp_fig[C_BLOCKS_SIZE][C_BLOCKS_SIZE];
@@ -63,8 +79,7 @@ void Rotate()
 			tb_temp_fig[i][j] = tb_current_fig[ C_BLOCKS_SIZE - j - 1][i];
 		}
 	}
-	
-	if (check(tb_temp_fig, px, py))
+	if(check(tb_temp_fig, px, py))
 	{
 		for(i=0;i<C_BLOCKS_SIZE;i++)
 		{
@@ -75,7 +90,39 @@ void Rotate()
 		}
 		Tetris_SetFigure(tb_current_fig, px, py);
 	}
-	
+	else
+	{
+		for(k = -2;k<3;k++)
+		{
+			if( check(tb_temp_fig, px+k, py))
+			{
+				px += k;
+				for(i=0;i<C_BLOCKS_SIZE;i++)
+				{
+					for(j=0;j<C_BLOCKS_SIZE;j++)
+					{
+						tb_current_fig[i][j] = tb_temp_fig[i][j];
+					}
+				}
+				Tetris_SetFigure(tb_current_fig, px, py);
+				return;
+			}
+		}
+	}
+	/*if (check(tb_temp_fig, px, py) )//|| check(tb_temp_fig, px-1, py) || check(tb_temp_fig, px+1, py))
+	{
+		rotation_SetFigure(tb_temp_fig);
+	}
+	else if( check(tb_temp_fig, px-1, py))
+	{
+		px--;
+		rotation_SetFigure(tb_temp_fig);
+	}
+	else if( check(tb_temp_fig, px+1, py))
+	{
+		px++;
+		rotation_SetFigure(tb_temp_fig);
+	}*/
 }
 BOOL moveDown() //TODO: return bool value id movedown is possible
 {
