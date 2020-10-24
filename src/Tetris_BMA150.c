@@ -32,14 +32,10 @@ void CalibrateBMA150()
 	char buffer[16];
 	my_BMA150_XYZ ValueXYZ;
 	get_XYZ(&ValueXYZ);
-	//ValueXYZ.x += g_devAccelerationX-g_devAccOffsetX;
-	//ValueXYZ.y += g_devAccelerationY-g_devAccOffsetY;
-
+	//moyenne sur 200 périodes
 	axisX += ValueXYZ.x-offsetAccX;
 	axisY += ValueXYZ.y-offsetAccY;
 
-	//axisZ += g_devAccelerationZ-g_devAccOffsetZ;
-	
 	if (filterPass == 200)
 	{
 		oledPutROMString("   CALIBRATE SENSOR  ",0,0);

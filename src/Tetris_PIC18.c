@@ -17,6 +17,7 @@ static int py = -1;
 static int px = 2;
 static int score = 0;
 static int level = 0;
+static int InvertedSpeed = 15;
 BOOL tb_current_fig[C_BLOCKS_SIZE][C_BLOCKS_SIZE];
 static int current_fig = 4;
 static int counter_movedown = 0;
@@ -184,6 +185,7 @@ void setFigure()
 	}
 	py = -1;
     px = 2;
+	InvertedSpeed = 15;
 	//TODO: calcule time intervzal //_timer.Interval = (int)(200 / (level * 0.7));
 }
 void Tetris_Init(void)
@@ -207,13 +209,14 @@ void Tetris_process(void)
 {
 	signed int value_x,value_y;
 	my_BMA150_XYZ posAcc;
-		unsigned int w1;
+	unsigned int w1;
 	if(TetrisInGame )
 	{
 		get_XYZ(&posAcc);
 		counter_movedown ++;
 		value_x = posAcc.x - offsetAccX;
-		if(counter_movedown <= 9)
+		value_y = posAcc.y - offsetAccY;
+		if(counter_movedown <= InvertedSpeed )
 		{
 			if(counter_movedown%3 == 0)
 			{
@@ -248,7 +251,24 @@ void Tetris_process(void)
 					Show_TetrisGrid();
 				}
 			}
-		
+			
+			if( (value_y & 0x0100) ) //negative => Left
+			{
+				//Penche vers l'utilisateur
+				value_y = (~(value_y-1))&0x1FF;
+				if(value_y > 20)
+				{	
+					InvertedSpeed--;
+					if(InvertedSpeed < 1)
+						InvertedSpeed=1;
+				}
+				else
+					InvertedSpeed = 15;
+			}
+			else
+			{
+				InvertedSpeed = 15;
+			}
 		}
 		else	
 		{
@@ -283,6 +303,7 @@ void stop()
 	TetrisInGame  = FALSE;
 	oledPutImage( tb_uc_GameOver,128,8,0,0);
 	setScore(score,2,1);
+	DelayMs(500);
 }
 
 void Show_TetrisGrid(void)
