@@ -40,7 +40,6 @@
 
 
 
-#define ROM_STRING (rom unsigned char*)
 
 
 

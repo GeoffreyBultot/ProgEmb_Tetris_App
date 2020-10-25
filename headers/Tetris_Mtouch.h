@@ -24,7 +24,8 @@ extern unsigned char g_isTouched;
 extern signed int g_scroolCount;
 extern SCROLL_WHEEL_POSITION scrollBarState;
 
+void CalibrateBMA150(void);
 BOOL CheckButtonPressed(void);
 SCROLL_WHEEL_POSITION GetScrollState(unsigned int w1, unsigned int w2);
-SCROLL_WHEEL_DIRECTION GetScrollDirection();
+SCROLL_WHEEL_DIRECTION GetScrollDirection(void);
 #endif

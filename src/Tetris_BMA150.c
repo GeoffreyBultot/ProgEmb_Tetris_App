@@ -1,6 +1,8 @@
 #include "./headers/Tetris_BMA150.h"
 #include "./headers/BMA150.h"
 #include "./headers/mtouch.h"
+#include "./headers/Oled.h"
+#include "./headers/Tetris_Oled.h"
 
 signed int offsetAccX = 0;
 signed int offsetAccY = 0;
@@ -38,7 +40,7 @@ void CalibrateBMA150()
 
 	if (filterPass == 200)
 	{
-		oledPutROMString("   CALIBRATE SENSOR  ",0,0);
+		oledPutROMString(ROM_STRING"   CALIBRATE SENSOR  ",0,0);
 		sprintf((char *)buffer, (const far rom char *)("   X:  %d             "), axisX/200);
 		oledPutString((unsigned char *)buffer,2,0);
 		sprintf((char *)buffer, (const far rom char *)("   Y:  %d             "), axisY/200);

@@ -2,6 +2,8 @@
 #include "./headers/Tetris_PIC18.h"
 #include "./headers/Tetris_Oled.h"
 #include "./headers/Tetris_BMA150.h"
+#include "./headers/Tetris_Mtouch.h"
+#include "./headers/mtouch.h"
 #include "./headers/Oled.h"
 #include "./headers/ArraysImages.h"
 #include "GenericTypeDefs.h"
@@ -233,7 +235,8 @@ void Tetris_process(void)
 			w1 = mTouchReadButton(3); //Cancel Button
 			if(w1 < 600)
 			{
-				TetrisInGame = FALSE;
+				//TetrisInGame = FALSE;
+				stop();
 			}
 			if(counter_movedown%C_TICKS_BETWWEN_MOVES == 0)
 			{

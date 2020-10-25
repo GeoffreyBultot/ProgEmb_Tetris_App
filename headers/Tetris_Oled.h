@@ -19,6 +19,7 @@
 #define C_OLED_BLOCK_BITS_ER 0b00000000
 #define C_TETRIS_WIDTH 8
 #define C_TETRIS_HEIGHT 16
+#define ROM_STRING (rom unsigned char*)
 void stop();
 /*void Tetris_Oled_Write(char data);
 char Tetris_Oled_Read();

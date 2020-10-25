@@ -1,6 +1,9 @@
 
 #include "stdio.h"
 #include "Compiler.h"
+#include "./headers/Oled.h"
+#include "./headers/Tetris_Oled.h"
+#include "./headers/mtouch.h"
 #include "./headers/Tetris_Mtouch.h"
 
 
@@ -75,9 +78,8 @@ SCROLL_WHEEL_DIRECTION GetScrollDirection()
 	w2 = mTouchReadButton(2);
 	scrollBarState = GetScrollState(w1, w2);
 	w1 = 1;
-	sprintf(buffer,"%ud",w1);
 
-	oledPutROMString(buffer,6,0);
+	oledPutROMString(ROM_STRING(buffer),6,0);
 	if ((scrollBarState != NO_TOUCH) && (g_isTouched == 0))
 	{		
 		g_isTouched = 1;
