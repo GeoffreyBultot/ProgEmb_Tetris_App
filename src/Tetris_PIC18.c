@@ -7,6 +7,16 @@
 #include "GenericTypeDefs.h"
 #include "timers.h"
 
+//MD = move DOWN
+#define C_CPTR_MD_MIN 0
+#define C_CPTR_MD_MAX 15
+#define C_TICKS_BETWWEN_MOVES 3
+
+#define C_ACC_TILT_LEFT 15
+#define C_ACC_TILT_RIGHT 15
+#define C_ACC_TILT_DOWN 20
+
+
 typedef enum{
 	E_Figure_Erase = 1,
 	E_Figure_Set
@@ -17,7 +27,7 @@ static int py = -1;
 static int px = 2;
 static int score = 0;
 static int level = 0;
-static int InvertedSpeed = 15;
+static int InvertedSpeed = C_CPTR_MD_MAX;
 BOOL tb_current_fig[C_BLOCKS_SIZE][C_BLOCKS_SIZE];
 static int current_fig = 4;
 static int counter_movedown = 0;
@@ -26,6 +36,7 @@ BOOL TetrisInGame  = FALSE;
 /*Local Prototypes*/
 static void Tetris_DrawFigure(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE], int x, int y, T_Figure_Drawing Set_or_Erase);
 static void Tetris_ShowFigureAtEnd(BOOL piece[C_BLOCKS_SIZE][C_BLOCKS_SIZE]);
+
 void ShowAnimationStart(void)
 {
 	unsigned char i,j;
@@ -186,7 +197,7 @@ void setFigure()
 	}
 	py = -1;
     px = 2;
-	InvertedSpeed = 15;
+	InvertedSpeed = C_CPTR_MD_MAX;
 	//TODO: calcule time intervzal //_timer.Interval = (int)(200 / (level * 0.7));
 }
 void Tetris_Init(void)
@@ -219,7 +230,12 @@ void Tetris_process(void)
 		value_y = posAcc.y - offsetAccY;
 		if(counter_movedown <= InvertedSpeed )
 		{
-			if(counter_movedown%3 == 0)
+			w1 = mTouchReadButton(3); //Cancel Button
+			if(w1 < 600)
+			{
+				TetrisInGame = FALSE;
+			}
+			if(counter_movedown%C_TICKS_BETWWEN_MOVES == 0)
 			{
 				w1 = mTouchReadButton(0); //Accept Button
 				if (w1 < 600)
@@ -228,28 +244,25 @@ void Tetris_process(void)
 					Show_TetrisGrid();
 				}
 				
-				w1 = mTouchReadButton(3); //Cancel Button
-				if(w1 < 600)
-				{
-					TetrisInGame = FALSE;
-				}
-			}
-			if(value_x & 0x0100) //negative => Left
-			{
 				
-				value_x = (~(value_x-1))&0x1FF;
-				if(value_x > 15)
+			
+				if(value_x & 0x0100) //negative => Left
 				{
-					moveLeft();
-					Show_TetrisGrid();
+					
+					value_x = (~(value_x-1))&0x1FF;
+					if(value_x > C_ACC_TILT_LEFT)
+					{
+						moveLeft();
+						Show_TetrisGrid();
+					}
 				}
-			}
-			else //Positive => Right
-			{
-				if(value_x > 15)
+				else //Positive => Right
 				{
-					moveRight();
-					Show_TetrisGrid();
+					if(value_x > C_ACC_TILT_RIGHT)
+					{
+						moveRight();
+						Show_TetrisGrid();
+					}
 				}
 			}
 			
@@ -257,18 +270,18 @@ void Tetris_process(void)
 			{
 				//Penche vers l'utilisateur
 				value_y = (~(value_y-1))&0x1FF;
-				if(value_y > 20)
+				if(value_y > C_ACC_TILT_DOWN)
 				{	
 					InvertedSpeed--;
 					if(InvertedSpeed < 1)
-						InvertedSpeed=1;
+						InvertedSpeed=C_CPTR_MD_MIN ;
 				}
 				else
-					InvertedSpeed = 15;
+					InvertedSpeed = C_CPTR_MD_MAX ;
 			}
 			else
 			{
-				InvertedSpeed = 15;
+				InvertedSpeed = C_CPTR_MD_MAX;
 			}
 		}
 		else	

@@ -11,9 +11,6 @@ signed int g_touchStartVal = 0;
 unsigned char g_isTouched = 0;
 signed int g_scroolCount = 0;
 
-
-
-
 BOOL CheckButtonPressed(void)
 {
     static char buttonPressed = FALSE;

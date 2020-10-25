@@ -69,13 +69,13 @@ void AppStateMachine(void)
             ResetDevice();  
             FillDisplay(0x00);
 			
-            oledPutROMString("     TETRIS v1.0     ",0,0);
-            oledPutROMString(" By BULTOT  Geoffrey ",1,0);
-			oledPutROMString("                     ",2,0);
-			oledPutROMString("  Powered on PIC18F  ",3,0);
-			oledPutROMString("  Generated at ISIB  ",4,0);
-			oledPutROMString("                     ",5,0);
-			oledPutROMString(" PRESS MENU TO START ",6,0);
+            oledPutROMString(ROM_STRING"     TETRIS v1.0     ",0,0);
+            oledPutROMString(ROM_STRING" By BULTOT  Geoffrey ",1,0);
+			oledPutROMString(ROM_STRING"                     ",2,0);
+			oledPutROMString(ROM_STRING"  Powered on PIC18F  ",3,0);
+			oledPutROMString(ROM_STRING"  Generated at ISIB  ",4,0);
+			oledPutROMString(ROM_STRING"                     ",5,0);
+			oledPutROMString(ROM_STRING" PRESS MENU TO START ",6,0);
             menuPosition = 2;
             break;
 
@@ -87,13 +87,13 @@ void AppStateMachine(void)
             break;
 
         case 3:
-            oledPutROMString(" 1. Use scroll to    ",0,0);
-            oledPutROMString(" select menu items.  ",1,0);
-            oledPutROMString(" 2. Tilt the board   ",2,0);
-            oledPutROMString("   to move blocks.   ",3,0);
-            oledPutROMString(" 3.     Enjoy !      ",4,0);
-            oledPutROMString("                     ",5,0);
-            oledPutROMString("Press Menu to proceed",6,0);
+            oledPutROMString(ROM_STRING" 1. Use scroll to    ",0,0);
+            oledPutROMString(ROM_STRING" select menu items.  ",1,0);
+            oledPutROMString(ROM_STRING" 2. Tilt the board   ",2,0);
+            oledPutROMString(ROM_STRING"   to move blocks.   ",3,0);
+            oledPutROMString(ROM_STRING" 3.     Enjoy !      ",4,0);
+            oledPutROMString(ROM_STRING"                     ",5,0);
+            oledPutROMString(ROM_STRING"Press Menu to proceed",6,0);
             menuPosition = 4;
             break;
 
@@ -119,25 +119,25 @@ void AppStateMachine(void)
 			}		
 			
 			
-            oledPutROMString("                     ",0,0);
-            oledPutROMString("                     ",2,0);
-            oledPutROMString("                     ",4,0);
-            oledPutROMString("                     ",6,0);
+            oledPutROMString(ROM_STRING"                     ",0,0);
+            oledPutROMString(ROM_STRING"                     ",2,0);
+            oledPutROMString(ROM_STRING"                     ",4,0);
+            oledPutROMString(ROM_STRING"                     ",6,0);
 
 			if (g_menuSelected == 0)
-				oledPutROMNegString("      NEW  GAME      ",1,0);	
+				oledPutROMNegString(ROM_STRING"      NEW  GAME      ",1,0);	
 			else
-            	oledPutROMString("      NEW  GAME      ",1,0);
+            	oledPutROMString(ROM_STRING"      NEW  GAME      ",1,0);
 		    
 			if (g_menuSelected == 1)
-            	oledPutROMNegString("      CALIBRATE      ",3,0);
+            	oledPutROMNegString(ROM_STRING"      CALIBRATE      ",3,0);
 			else
-				oledPutROMString("      CALIBRATE      ",3,0);
+				oledPutROMString(ROM_STRING"      CALIBRATE      ",3,0);
 			
 			if (g_menuSelected == 2)
-            	oledPutROMNegString("      QUIT GAME      ",5,0);
+            	oledPutROMNegString(ROM_STRING"      QUIT GAME      ",5,0);
 			else
-				oledPutROMString("      QUIT GAME      ",5,0);
+				oledPutROMString(ROM_STRING"      QUIT GAME      ",5,0);
 
 
 			w1 = mTouchReadButton(0); //Accept Button
